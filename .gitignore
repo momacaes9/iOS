@@ -1,1 +1,5 @@
 .DS_Store
+# Each project below has its own git repo
+WeatherApp/
+Reminders/
+Trivvey/
