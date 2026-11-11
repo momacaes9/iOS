@@ -7,7 +7,7 @@ import SwiftUI
 struct ContentView: View {
     // MARK: - State (data that changes while the app runs)
     @State private var isPlaying = false
-    @State private var isLiked = false
+    @State private var isAdded = false               // added to your library?
     @State private var isShuffleOn = false
     @State private var isRepeatOn = false
     @State private var currentTime: Double = 83     // seconds elapsed (starts at 1:23)
@@ -15,16 +15,20 @@ struct ContentView: View {
     // Song info. `let` means these never change.
     let songTitle = "Bohemian Rhapsody"
     let artist = "Queen"
-    let album = "A Night at the Opera"
-    let songLength: Double = 355                     // 5:55 = 5*60 + 55 seconds
+    let songLength: Double = 349                     // 5:49 = 5*60 + 49 seconds
 
     var body: some View {
         // ZStack layers views on top of each other (back → front).
         // The gradient goes in the back and the content sits on top.
         ZStack {
             // LinearGradient blends colors along a direction (top → bottom here).
+            // The colors come from the album art: purple sky → orange stage → near-black.
             LinearGradient(
-                colors: [Color(red: 0.55, green: 0.05, blue: 0.08), .black],
+                colors: [
+                    Color(red: 0.36, green: 0.16, blue: 0.42),   // deep purple
+                    Color(red: 0.30, green: 0.14, blue: 0.08),   // dark orange-brown
+                    Color(red: 0.07, green: 0.05, blue: 0.05)    // near-black
+                ],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -32,17 +36,6 @@ struct ContentView: View {
 
             // VStack stacks its children vertically. `spacing` is the gap between them.
             VStack(spacing: 24) {
-                // Small header, like Spotify's "PLAYING FROM ALBUM"
-                VStack(spacing: 2) {
-                    Text("PLAYING FROM ALBUM")
-                        .font(.caption2)
-                        .foregroundStyle(.white.opacity(0.7))
-                    Text(album)
-                        .font(.caption)
-                        .bold()
-                        .foregroundStyle(.white)
-                }
-
                 // Spacer takes up all the empty space it can, which pushes the other views apart.
                 Spacer()
 
@@ -50,7 +43,7 @@ struct ContentView: View {
 
                 Spacer()
 
-                SongInfoView(title: songTitle, artist: artist, isLiked: $isLiked)
+                SongInfoView(title: songTitle, artist: artist, isAdded: $isAdded)
 
                 SongProgressView(currentTime: $currentTime, songLength: songLength)
 
@@ -63,6 +56,7 @@ struct ContentView: View {
             .padding(.horizontal, 24)   // gap on the left and right sides
             .padding(.vertical)
         }
+        .statusBarHidden(true)   // hide the time, wifi and battery at the top
     }
 }
 

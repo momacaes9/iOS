@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "bohemian.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

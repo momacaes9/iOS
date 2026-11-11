@@ -1,13 +1,13 @@
 import SwiftUI
 
-// Song title and artist on the left, heart button on the right.
+// Song title and artist on the left, the "add to library" button on the right.
 struct SongInfoView: View {
     let title: String
     let artist: String
 
     // @Binding means this view doesn't own the data. It reads and writes
     // the @State that lives in ContentView.
-    @Binding var isLiked: Bool
+    @Binding var isAdded: Bool
 
     var body: some View {
         // HStack puts its children side by side (horizontally).
@@ -23,22 +23,22 @@ struct SongInfoView: View {
                     .foregroundStyle(.white.opacity(0.7))
             }
 
-            Spacer()   // pushes the heart all the way to the right
+            Spacer()   // pushes the button all the way to the right
 
             Button {
-                isLiked.toggle()   // toggle() flips true <-> false
+                isAdded.toggle()   // toggle() flips true <-> false
             } label: {
                 // Ternary operator: condition ? valueIfTrue : valueIfFalse
-                Image(systemName: isLiked ? "heart.fill" : "heart")
+                Image(systemName: isAdded ? "checkmark.circle.fill" : "plus.circle")
                     .font(.title2)
-                    .foregroundStyle(isLiked ? .green : .white)
+                    .foregroundStyle(isAdded ? .green : .white)
             }
         }
     }
 }
 
 #Preview {
-    SongInfoView(title: "Bohemian Rhapsody", artist: "Queen", isLiked: .constant(true))
+    SongInfoView(title: "Bohemian Rhapsody", artist: "Queen", isAdded: .constant(true))
         .padding()
         .background(.black)
 }
