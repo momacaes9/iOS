@@ -1,5 +1,8 @@
+# macOS
 .DS_Store
-# Each project below has its own git repo
-WeatherApp/
-Reminders/
-Trivvey/
+
+# Xcode
+xcuserdata/
+DerivedData/
+*.xcuserstate
+build/
