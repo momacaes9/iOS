@@ -2,20 +2,23 @@ import SwiftUI
 
 // A friendly error screen with a Retry button.
 // Both APIs use it: the country list and the currency converter.
+// The title, icon and message all come from the APIError, so each problem looks different.
 struct ErrorView: View {
-    let message: String
+    let error: APIError
     let retry: () async -> Void     // what to run when Retry is tapped
 
     var body: some View {
         // ContentUnavailableView is Apple's ready-made "empty / error" layout
         ContentUnavailableView {
-            Label("Something went wrong", systemImage: "wifi.exclamationmark")
+            Label(error.title, systemImage: error.symbolName)
         } description: {
-            Text(message)
+            Text(error.errorDescription ?? "Please try again.")
         } actions: {
-            Button("Retry") {
+            Button {
                 // Buttons can't await directly, so we start a Task to run async code
                 Task { await retry() }
+            } label: {
+                Label("Retry", systemImage: "arrow.clockwise")
             }
             .buttonStyle(.borderedProminent)
         }
@@ -23,5 +26,5 @@ struct ErrorView: View {
 }
 
 #Preview {
-    ErrorView(message: "Couldn't reach the server. Check your internet connection and try again.", retry: {})
+    ErrorView(error: .missingKey, retry: {})
 }

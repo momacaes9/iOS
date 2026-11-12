@@ -10,7 +10,7 @@ struct CurrencyConverterView: View {
     // @State for the downloaded rates and the loading/error status
     @State private var rates: ExchangeRates? = nil
     @State private var isLoading = false
-    @State private var errorMessage: String? = nil
+    @State private var loadError: APIError? = nil
 
     // @FocusState tracks whether the keyboard is open for the text field
     @FocusState private var isAmountFocused: Bool
@@ -61,8 +61,8 @@ struct CurrencyConverterView: View {
             if isLoading {
                 LoadingView(message: "Getting today's rates…")
                     .frame(height: 80)
-            } else if let errorMessage {
-                ErrorView(message: errorMessage, retry: loadRates)
+            } else if let loadError {
+                ErrorView(error: loadError, retry: loadRates)
             } else if let rates, let rate = rates.rate(for: currency.code) {
                 VStack(alignment: .leading, spacing: 4) {
                     // .currency(code:) formats with the right symbol and decimals, e.g. "€90.25"
@@ -90,11 +90,11 @@ struct CurrencyConverterView: View {
 
     func loadRates() async {
         isLoading = true
-        errorMessage = nil
+        loadError = nil
         do {
             rates = try await ExchangeService.fetchRates(base: "USD")
         } catch {
-            errorMessage = error.localizedDescription
+            loadError = APIError.from(error)
         }
         isLoading = false
     }
