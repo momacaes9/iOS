@@ -5,7 +5,7 @@ struct CountryListView: View {
     // Data passed in from ContentView
     let countries: [Country]
     let isLoading: Bool
-    let errorMessage: String?
+    let error: APIError?
     let reload: () async -> Void        // a function we can call to download again
 
     // @State for the user's choices on this screen
@@ -88,8 +88,8 @@ struct CountryListView: View {
     var content: some View {
         if isLoading && countries.isEmpty {
             LoadingView(message: "Loading countries…")
-        } else if let errorMessage, countries.isEmpty {
-            ErrorView(message: errorMessage, retry: reload)
+        } else if let error, countries.isEmpty {
+            ErrorView(error: error, retry: reload)
         } else if visibleCountries.isEmpty {
             // Apple's built-in "No Results for …" screen
             ContentUnavailableView.search(text: searchText)
@@ -113,5 +113,5 @@ struct CountryListView: View {
 }
 
 #Preview {
-    CountryListView(countries: Country.samples, isLoading: false, errorMessage: nil, reload: {})
+    CountryListView(countries: Country.samples, isLoading: false, error: nil, reload: {})
 }

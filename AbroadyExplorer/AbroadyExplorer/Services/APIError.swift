@@ -26,4 +26,27 @@ enum APIError: LocalizedError {
             return "Couldn't reach the server. Check your internet connection and try again."
         }
     }
+
+    // A short headline for ErrorView
+    var title: String {
+        switch self {
+        case .missingKey, .unauthorized: return "API Key Needed"
+        case .network: return "You're Offline"
+        default: return "Something Went Wrong"
+        }
+    }
+
+    // An SF Symbol that matches the problem
+    var symbolName: String {
+        switch self {
+        case .missingKey, .unauthorized: return "key.fill"
+        case .network: return "wifi.exclamationmark"
+        default: return "exclamationmark.triangle"
+        }
+    }
+
+    // Turns any error into an APIError, so the views only have to handle one type
+    static func from(_ error: Error) -> APIError {
+        (error as? APIError) ?? .network(error)
+    }
 }

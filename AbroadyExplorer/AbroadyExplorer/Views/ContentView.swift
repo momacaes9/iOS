@@ -5,14 +5,14 @@ import SwiftUI
 struct ContentView: View {
     @State private var countries: [Country] = []
     @State private var isLoading = false
-    @State private var errorMessage: String? = nil     // nil means "no error"
+    @State private var loadError: APIError? = nil        // nil means "no error"
 
     var body: some View {
         TabView {
             Tab("Explore", systemImage: "globe.americas.fill") {
                 CountryListView(countries: countries,
                                 isLoading: isLoading,
-                                errorMessage: errorMessage,
+                                error: loadError,
                                 reload: loadCountries)
             }
             Tab("Favorites", systemImage: "heart.fill") {
@@ -28,12 +28,12 @@ struct ContentView: View {
     // Downloads all countries and updates the @State, which redraws the screen.
     func loadCountries() async {
         isLoading = true
-        errorMessage = nil
+        loadError = nil
         do {
             countries = try await CountryService.fetchCountries()
         } catch {
             // error.localizedDescription uses the friendly text from APIError
-            errorMessage = error.localizedDescription
+            loadError = APIError.from(error)
         }
         isLoading = false
     }
