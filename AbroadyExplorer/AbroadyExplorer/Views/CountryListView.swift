@@ -60,6 +60,10 @@ struct CountryListView: View {
                 content
             }
             .navigationTitle("Explore")
+            // Says which screen to show for a tapped Country
+            .navigationDestination(for: Country.self) { country in
+                CountryDetailView(country: country)
+            }
             // .searchable adds a search bar under the title and binds it to searchText
             .searchable(text: $searchText, prompt: "Search countries")
             .toolbar {
@@ -93,7 +97,10 @@ struct CountryListView: View {
             List {
                 // ForEach + a reusable subview for each row
                 ForEach(visibleCountries) { country in
-                    CountryRowView(country: country)
+                    // NavigationLink(value:) opens the detail screen when the row is tapped
+                    NavigationLink(value: country) {
+                        CountryRowView(country: country)
+                    }
                 }
             }
             .listStyle(.plain)

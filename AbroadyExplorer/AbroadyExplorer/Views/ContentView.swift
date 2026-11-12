@@ -1,6 +1,6 @@
 import SwiftUI
 
-// The root of the app: a TabView with the Explore tab.
+// The root of the app: a TabView with the Explore and Favorites tabs.
 // ContentView owns the downloaded countries (@State), so every tab can share the same list.
 struct ContentView: View {
     @State private var countries: [Country] = []
@@ -14,6 +14,9 @@ struct ContentView: View {
                                 isLoading: isLoading,
                                 errorMessage: errorMessage,
                                 reload: loadCountries)
+            }
+            Tab("Favorites", systemImage: "heart.fill") {
+                FavoritesView(countries: countries, isLoading: isLoading)
             }
         }
         // .task runs async code when the view first appears
