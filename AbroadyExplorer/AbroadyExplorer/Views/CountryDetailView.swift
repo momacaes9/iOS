@@ -7,6 +7,9 @@ struct CountryDetailView: View {
     // @AppStorage saves a value on the phone, so favorites are still there after the app closes.
     @AppStorage(Favorites.storageKey) private var favoriteCodes = ""
 
+    // The USD amount for the converter. It lives here, and the converter edits it with a @Binding.
+    @State private var usdAmount = "100"
+
     // A custom Binding: it reads and writes favoriteCodes, but looks like a simple Bool
     // to FavoriteButton. `get` answers "is it saved?" and `set` saves or removes it.
     var isFavorite: Binding<Bool> {
@@ -74,9 +77,14 @@ struct CountryDetailView: View {
                     }
                 }
                 .cardStyle()
+
+                // Converter card. $usdAmount passes a Binding to our @State.
+                CurrencyConverterView(currency: country.mainCurrency, amountText: $usdAmount)
+                    .cardStyle()
             }
             .padding()
         }
+        .scrollDismissesKeyboard(.interactively)    // drag down to hide the keyboard
         .background(Color(.systemGroupedBackground))
         .navigationTitle(country.name)
         .navigationBarTitleDisplayMode(.inline)
