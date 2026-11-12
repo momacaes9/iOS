@@ -6,3 +6,6 @@ xcuserdata/
 DerivedData/
 *.xcuserstate
 build/
+
+# Real API keys (see AbroadyExplorer/AbroadyExplorer/Secrets.example.swift)
+AbroadyExplorer/AbroadyExplorer/Secrets.swift
